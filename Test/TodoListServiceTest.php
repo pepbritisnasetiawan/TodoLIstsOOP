@@ -3,27 +3,30 @@
 require_once "Entity/TodoList.php";
 require_once "Repository/TodoListRepository.php";
 require_once "Service/TodoListService.php";
+require_once "Config/Database.php";
 
+use Config\Database;
 use Entity\TodoList;
 use Repository\TodoListRepositoryImp;
 use Service\TodoListServiceImp;
 
 function testShowTodoList() {
 
-    $todoListRepository = new TodoListRepositoryImp();
-
-    $todoListRepository->todoList[1] = new TodoList("Belajar PHP");
-    $todoListRepository->todoList[2] = new TodoList("Belajar PHP");
-    $todoListRepository->todoList[3] = new TodoList("Belajar PHP");
-    $todoListRepository->todoList[4] = new TodoList("Belajar PHP");
+    $connection = Database::getConnection();
+    $todoListRepository = new TodoListRepositoryImp($connection);
     $todoListService = new TodoListServiceImp($todoListRepository);
+    $todoListService->addTodoList("Belajar PHP");
+    $todoListService->addTodoList("Belajar PHP OOP");
+    $todoListService->addTodoList("Belajar PHP Web");
 
     $todoListService->showTodoList();
 }
 
 function testAddTodoList(): void
 {
-    $todoListRepository = new TodoListRepositoryImp();
+    $connection = Database::getConnection();
+
+    $todoListRepository = new TodoListRepositoryImp($connection);
 
     $todoListService = new TodoListServiceImp($todoListRepository);
     $todoListService->addTodoList("Belajar PHP");
@@ -31,33 +34,25 @@ function testAddTodoList(): void
     $todoListService->addTodoList("Belajar PHP");
     $todoListService->addTodoList("Belajar PHP");
 
-    $todoListService->showTodoList();
+    // $todoListService->showTodoList();
 }
 
 function testDeleteTodoList(): void
 {
-    $todoListRepository = new TodoListRepositoryImp();
+
+    $connection = Database::getConnection();
+
+    $todoListRepository = new TodoListRepositoryImp($connection);
 
     $todoListService = new TodoListServiceImp($todoListRepository);
-    $todoListService->addTodoList("Belajar OOP");
-    $todoListService->addTodoList("Belajar PHP");
-    $todoListService->addTodoList("Belajar PHP");
-    $todoListService->addTodoList("Belajar PHP");
 
-    $todoListService->showTodoList();
-
-    $todoListService->deleteTodoList(1);
-    $todoListService->showTodoList();
-    
-    $todoListService->deleteTodoList(2);
-    $todoListService->showTodoList();
-
-    $todoListService->deleteTodoList(2);
-    $todoListService->showTodoList();
-    
-    $todoListService->deleteTodoList(1);
-    $todoListService->showTodoList();
+    echo $todoListService->deleteTodoList(6) . PHP_EOL;
+    echo $todoListService->deleteTodoList(5) . PHP_EOL;
+    echo $todoListService->deleteTodoList(4) . PHP_EOL;
+    echo $todoListService->deleteTodoList(3) . PHP_EOL;
+    echo $todoListService->deleteTodoList(2) . PHP_EOL;
+    echo $todoListService->deleteTodoList(1) . PHP_EOL;
 }
 
 
-testDeleteTodoList();
+testShowTodoList();
